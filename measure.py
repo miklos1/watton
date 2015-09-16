@@ -7,19 +7,14 @@ from pyop2.profiling import Timer
 
 parameters["pyop2_options"]["profiling"] = True
 
-timer = Timer("Mesh: cell_closure (quadrilateral)")
-
 
 def measure(name, thunk):
-    timer.reset()
-
     mesh = thunk()
     mesh.init()
 
-    if timer.ncalls != 1:
-        print "Unexpected number of cell_closure calls: %d" % timer.ncalls
-
-    sendbuf = np.array([timer.total, timer.total * timer.total], dtype=float)
+    timer = Timer("Mesh: cell_closure (quadrilateral)")
+    runtime = timer._timings[-1]
+    sendbuf = np.array([runtime, runtime * runtime], dtype=float)
     recvbuf = MPI.comm.reduce(sendbuf)
     if MPI.comm.rank == 0:
         M1, M2 = recvbuf
