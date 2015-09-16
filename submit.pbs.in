@@ -1,0 +1,22 @@
+#!/bin/bash --login
+
+#PBS -N measure_@@nnodes@@
+#PBS -l walltime=06:00:00
+#PBS -l select=@@nnodes@@
+#PBS -A n02-NEK006789
+#PBS -m eba
+#PBS -M m.homolya14@imperial.ac.uk
+
+NPROCS=@@nprocs@@
+
+# Make sure any symbolic links are resolved to absolute path
+export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR)
+
+# This shifts to the directory that you submitted the job from
+cd $PBS_O_WORKDIR
+
+WORK=/work/n02/n02/miklos1
+. $WORK/envs/firedrake_system.env
+export PYTHONPATH=${WORK}/Firedrake:${PYTHONPATH}
+
+aprun -b -n $NPROCS python measure.py
