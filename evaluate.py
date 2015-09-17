@@ -78,9 +78,30 @@ for nodecount, jobs_per_nodecount in results.iteritems():
 for name, dictionary in comm_rounds.iteritems():
     print '**', name
     table = np.array(sorted(dictionary.iteritems()))
+    table[:, 0] *= 24  # switch from nodes to cores
     m, b = np.polyfit(np.log(table[:, 0]), np.log(table[:, 1]), 1)
 
     for entry in table:
         print "%d,%d" % tuple(entry)
     print 'log-log linear fitting slope:', m
 
+
+print '**** Execution times in tabular form'
+
+name_times = collections.defaultdict(dict)
+for nodecount in sorted(results):
+    jobs_per_nodecount = results[nodecount]
+
+    ntimes = collections.defaultdict(list)
+    for job in jobs_per_nodecount:
+        for name, result in job.iteritems():
+            ntimes[name].append(result["mean"])
+    for name, times in ntimes.iteritems():
+        name_times[name][nodecount] = np.average(times)
+for name, dictionary in name_times.iteritems():
+    print '**', name
+    table = np.array(sorted(dictionary.iteritems()))
+    table[:, 0] *= 24  # switch from nodes to cores
+
+    for entry in table:
+        print "%d,%g" % tuple(entry)
