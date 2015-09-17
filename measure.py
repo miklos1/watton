@@ -9,6 +9,9 @@ parameters["pyop2_options"]["profiling"] = True
 
 
 def measure(name, thunk):
+    if MPI.comm.rank == 0:
+        print "name:", name
+
     mesh = thunk()
     mesh.init()
 
