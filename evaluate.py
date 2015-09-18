@@ -68,7 +68,8 @@ for nodecount in sorted(results):
             nrounds[name].add(result["rounds"])
     print "{0}: {1}".format(nodecount, all(len(v) <= 1 for v in nrounds.values()))
 
-print '**** Number of communication rounds in tabular form'
+slope_file = open('slopes.csv', 'w')
+print >> slope_file, "mesh,slope"
 
 comm_rounds = collections.defaultdict(dict)
 for nodecount, jobs_per_nodecount in results.iteritems():
@@ -76,17 +77,18 @@ for nodecount, jobs_per_nodecount in results.iteritems():
         for name, result in job.iteritems():
             comm_rounds[name][nodecount] = result["rounds"]
 for name, dictionary in comm_rounds.iteritems():
-    print '**', name
-    table = np.array(sorted(dictionary.iteritems()))
-    table[:, 0] *= 24  # switch from nodes to cores
-    m, b = np.polyfit(np.log(table[:, 0]), np.log(table[:, 1]), 1)
+    with open('rounds_%s.csv' % name, 'w') as file:
+        print >> file, "P,rounds"
+        table = np.array(sorted(dictionary.iteritems()))
+        table[:, 0] *= 24  # switch from nodes to cores
+        m, b = np.polyfit(np.log(table[:, 0]), np.log(table[:, 1]), 1)
 
-    for entry in table:
-        print "%d,%d" % tuple(entry)
-    print 'log-log linear fitting slope:', m
+        for entry in table:
+            print >> file, "%d,%d" % tuple(entry)
+        print >> slope_file, "%s,%f" % (name, m)
 
+slope_file.close()
 
-print '**** Execution times in tabular form'
 
 name_times = collections.defaultdict(dict)
 for nodecount in sorted(results):
@@ -99,9 +101,10 @@ for nodecount in sorted(results):
     for name, times in ntimes.iteritems():
         name_times[name][nodecount] = np.average(times)
 for name, dictionary in name_times.iteritems():
-    print '**', name
-    table = np.array(sorted(dictionary.iteritems()))
-    table[:, 0] *= 24  # switch from nodes to cores
+    with open('time_%s.csv' % name, 'w') as file:
+        print >> file, "P,time"
+        table = np.array(sorted(dictionary.iteritems()))
+        table[:, 0] *= 24  # switch from nodes to cores
 
-    for entry in table:
-        print "%d,%g" % tuple(entry)
+        for entry in table:
+            print >> file, "%d,%g" % tuple(entry)
