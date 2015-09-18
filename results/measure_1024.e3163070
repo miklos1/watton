@@ -1,0 +1,14 @@
+ModuleCmd_Load.c(226):ERROR:105: Unable to locate a modulefile for 'null'
+ModuleCmd_Load.c(226):ERROR:105: Unable to locate a modulefile for 'null'
+ModuleCmd_Switch.c(218):VERB:4: Switching 'craype' to 'craype/2.2.1'
+ModuleCmd_Switch.c(284):VERB:4: done
+ModuleCmd_Switch.c(218):VERB:4: Switching 'craype' to 'craype/2.2.1'
+ModuleCmd_Switch.c(284):VERB:4: done
+ModuleCmd_Switch.c(218):VERB:4: Switching 'cray-mpich' to 'cray-mpich/7.1.1'
+ModuleCmd_Switch.c(284):VERB:4: done
+[0] pyop2:INFO Communication rounds for cell closure: 189
+[0] pyop2:INFO Communication rounds for cell closure: 161
+[0] pyop2:INFO Communication rounds for cell closure: 4902
+[0] pyop2:INFO Communication rounds for cell closure: 152335
+[0] pyop2:INFO Communication rounds for cell closure: 3864
+[0] pyop2:INFO Communication rounds for cell closure: 7204

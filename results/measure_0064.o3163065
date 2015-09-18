@@ -1,0 +1,30 @@
+--------------------------------------------------------------------------------
+*** miklos1   Job: 3163065.sdb   started: 17/09/15 17:01:54   host: mom3 ***
+*** miklos1   Job: 3163065.sdb   started: 17/09/15 17:01:54   host: mom3 ***
+*** miklos1   Job: 3163065.sdb   started: 17/09/15 17:01:54   host: mom3 ***
+*** miklos1   Job: 3163065.sdb   started: 17/09/15 17:01:54   host: mom3 ***
+
+--------------------------------------------------------------------------------
+name: s_square
+cell_closure seconds s_square: 0.0351163 +- 0.000867695
+name: s_sphere
+cell_closure seconds s_sphere: 0.0308266 +- 2.08708e-05
+name: u_square
+cell_closure seconds u_square: 0.255334 +- 1.99475e-05
+name: u_sphere
+cell_closure seconds u_sphere: 8.71278 +- 4.37274e-05
+name: t10
+cell_closure seconds t10: 0.206887 +- 2.25823e-05
+name: t11
+cell_closure seconds t11: 0.693662 +- 1.35917e-05
+Application 17608510 resources: utime ~510717s, stime ~7912s, Rss ~1109884, inblocks ~87026270, outblocks ~1069846
+--------------------------------------------------------------------------------
+
+Resources requested: ncpus=1536,place=free,walltime=02:00:00
+Resources allocated: cpupercent=0,cput=00:00:01,mem=6600kb,ncpus=1536,vmem=75900kb,walltime=00:08:05
+
+*** miklos1   Job: 3163065.sdb   ended: 17/09/15 17:09:59   queue: standard ***
+*** miklos1   Job: 3163065.sdb   ended: 17/09/15 17:09:59   queue: standard ***
+*** miklos1   Job: 3163065.sdb   ended: 17/09/15 17:09:59   queue: standard ***
+*** miklos1   Job: 3163065.sdb   ended: 17/09/15 17:09:59   queue: standard ***
+--------------------------------------------------------------------------------
