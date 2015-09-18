@@ -85,7 +85,7 @@ for name, dictionary in comm_rounds.iteritems():
 
         for entry in table:
             print >> file, "%d,%d" % tuple(entry)
-        print >> slope_file, "%s,%f" % (name, m)
+        print >> slope_file, "%s,%f" % (name.replace('_', '''\_'''), m)
 
 slope_file.close()
 
