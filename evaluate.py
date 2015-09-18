@@ -58,7 +58,7 @@ print max(result["stddev"] / result["mean"]
           for job in jobs
           for result in job.values())
 
-print 'Is the number of communication rounds different between experiments?'
+print 'Is the number of communication rounds equal between experiments?'
 for nodecount in sorted(results):
     jobs_per_nodecount = results[nodecount]
 
