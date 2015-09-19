@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/18466/miklos1/watton.svg)](https://zenodo.org/badge/latestdoi/18466/miklos1/watton)
+
 #### Experimentation framework for the manuscript:
 
 > Miklós Homolya, and David A. Ham. "A parallel edge orientation algorithm for quadrilateral meshes." arXiv preprint arXiv:1505.03357 (2015).
