@@ -1,0 +1,78 @@
+diff --git a/firedrake/dmplex.pyx b/firedrake/dmplex.pyx
+index d98d111..1fd65a3 100644
+--- a/firedrake/dmplex.pyx
++++ b/firedrake/dmplex.pyx
+@@ -1,6 +1,7 @@
+ # Utility functions to derive global and local numbering from DMPlex
+ from petsc import PETSc
+ from pyop2 import MPI as _MPI
++from pyop2.logger import info
+ import numpy as np
+ cimport numpy as np
+ import cython
+@@ -1529,6 +1530,8 @@ def quadrilateral_facet_orientations(
+ 
+         np.ndarray[np.int8_t, ndim=1, mode="c"] result
+ 
++        int nrounds = 0
++
+     # Get communication lists
+     get_communication_lists(plex, vertex_numbering, cell_ranks,
+                             &nranks, &ranks, &offsets, &facets, &facet2index)
+@@ -1573,6 +1576,8 @@ def quadrilateral_facet_orientations(
+     # Synchronise shared edge directions in parallel
+     conflict = int(_MPI.comm.size > 1)
+     while conflict != 0:
++        nrounds += 1
++
+         # Populate 'theirs' by communication from the 'ours' of others.
+         exchange_edge_orientation_data(nranks, ranks, offsets, ours, theirs)
+ 
+@@ -1613,6 +1618,9 @@ def quadrilateral_facet_orientations(
+         # of communication everywhere.
+         conflict = _MPI.comm.allreduce(conflict)
+ 
++    if _MPI.comm.rank == 0:
++        info("Communication rounds for cell closure: %d" % nrounds)
++
+     CHKERR(PetscFree(ranks))
+     CHKERR(PetscFree(offsets))
+ 
+diff --git a/firedrake/mesh.py b/firedrake/mesh.py
+index b386be9..b85bcf7 100644
+--- a/firedrake/mesh.py
++++ b/firedrake/mesh.py
+@@ -513,21 +513,22 @@ class Mesh(object):
+ 
+         elif topological_dim == 2 and cell_facets == 4:
+             # Quadrilateral mesh
+-            cell_ranks = dmplex.get_cell_remote_ranks(plex)
++            with timed_region("Mesh: cell_closure (quadrilateral)"):
++                cell_ranks = dmplex.get_cell_remote_ranks(plex)
+ 
+-            facet_orientations = dmplex.quadrilateral_facet_orientations(
+-                plex, vertex_numbering, cell_ranks)
++                facet_orientations = dmplex.quadrilateral_facet_orientations(
++                    plex, vertex_numbering, cell_ranks)
+ 
+-            cell_orientations = dmplex.orientations_facet2cell(
+-                plex, vertex_numbering, cell_ranks,
+-                facet_orientations, cell_numbering)
++                cell_orientations = dmplex.orientations_facet2cell(
++                    plex, vertex_numbering, cell_ranks,
++                    facet_orientations, cell_numbering)
+ 
+-            dmplex.exchange_cell_orientations(plex,
+-                                              cell_numbering,
+-                                              cell_orientations)
++                dmplex.exchange_cell_orientations(plex,
++                                                  cell_numbering,
++                                                  cell_orientations)
+ 
+-            return dmplex.quadrilateral_closure_ordering(
+-                plex, vertex_numbering, cell_numbering, cell_orientations)
++                return dmplex.quadrilateral_closure_ordering(
++                    plex, vertex_numbering, cell_numbering, cell_orientations)
+ 
+         else:
+             raise RuntimeError("Unsupported mesh: neither simplex, nor quadrilateral.")
